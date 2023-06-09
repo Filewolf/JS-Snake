@@ -20,10 +20,7 @@ const snake = {
     maxBody: 3 
 };
 
-const food = {
-    x: 0,
-    y: 0
-};
+let food = getRandomFoodPosition();
 
 //other variables
 let lastRenderTime = 0;
@@ -46,15 +43,16 @@ function gameLoop(currentTime) {
 
     lastRenderTime = currentTime;
 
-    context.clearRect(0, 0, canvas.clientWidth, canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
-    drawSnake();
     drawFood();
+    drawSnake();
 }
 
 // call main function
 window.requestAnimationFrame(gameLoop); 
 
+// other functions
 function drawSnake() {
     snake.x += snake.vx;
     snake.y += snake.vy;
@@ -77,11 +75,18 @@ function drawSnake() {
         }
         context.fillRect( elem.x, elem.y, CELL_SIZE, CELL_SIZE );
 
-        if (elem.x === food.x && elem.y === food.y) {
+        if (onSnake(food)) {
             snake.maxBody++;
             incScore();
-            randomPositionFood();
+            food = getRandomFoodPosition();
         }
+    });
+}
+
+function onSnake(obj) {
+    return snake.body.some((elem, index) => {
+        if (index === 0) return false;
+        return comparePositions(elem, obj);
     });
 }
 
@@ -116,9 +121,18 @@ function drawFood() {
     context.fill();
 }
  
-function randomPositionFood() {
-    food.x = getRandomNum(0, canvas.width / CELL_SIZE) * CELL_SIZE;
-    food.y = getRandomNum(0, canvas.height / CELL_SIZE) * CELL_SIZE;
+function getRandomFoodPosition() {
+    let newPos;
+
+    while (newPos == null || onSnake(newPos)) {
+        newPos = randomCanvasPosition();
+    }
+
+    return newPos;
+}
+
+function comparePositions(pos1, pos2) {
+    return pos1.x === pos2.x && pos1.y === pos2.y;
 }
 
 function incScore() {
@@ -128,6 +142,13 @@ function incScore() {
 
 function getRandomNum(min, max) {
     return Math.floor( Math.random() * (max - min) + min );
+}
+
+function randomCanvasPosition() {
+    return { 
+        x: getRandomNum(0, canvas.width / CELL_SIZE) * CELL_SIZE,
+        y: getRandomNum(0, canvas.height / CELL_SIZE) * CELL_SIZE
+    };
 }
 
 // Keyboard listener
