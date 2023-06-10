@@ -11,11 +11,12 @@ const CELL_SIZE = 20;
 const FOOD_RADIUS = CELL_SIZE * 2/5; // radius of food circle
 const SNAKE_SPEED = 10; // snake moves ten times per second
 
+let lastDirection = { x: CELL_SIZE, y: 0 };
+let direction = { x: CELL_SIZE, y: 0 };
+
 const snake = {
     x: canvas.width / 2,
     y: canvas.width / 2,
-    vx: CELL_SIZE, // horizontal velocity
-    vy: 0, // vertical velocity
     body: [],
     maxBody: 3 
 };
@@ -54,8 +55,10 @@ window.requestAnimationFrame(gameLoop);
 
 // other functions
 function spawnSnake() {
-    snake.x += snake.vx;
-    snake.y += snake.vy;
+    getNewDirection();
+
+    snake.x += direction.x;
+    snake.y += direction.y;
 
     outsideCanvas();
 
@@ -145,32 +148,33 @@ function randomCanvasPosition() {
     };
 }
 
+function getNewDirection() {
+    lastDirection = direction;
+    return direction;
+}
+
 // Keyboard listener
 document.addEventListener('keydown', (e) => {
     switch(e.code) {
         case 'ArrowUp':
-            if (snake.vy > 0) break;
+            if (lastDirection.y > 0) break;
         
-            snake.vx = 0;
-            snake.vy = -CELL_SIZE;
+            direction = { x: 0, y: -CELL_SIZE };
             break;
         case 'ArrowDown':
-            if (snake.vy < 0) break;
+            if (lastDirection.y < 0) break;
 
-            snake.vx = 0;
-            snake.vy = CELL_SIZE;
+            direction = { x: 0, y: CELL_SIZE };
             break;
         case 'ArrowLeft':
-            if (snake.vx > 0) break;
+            if (lastDirection.x > 0) break;
 
-            snake.vx = -CELL_SIZE;
-            snake.vy = 0;
+            direction = { x: -CELL_SIZE, y: 0 };
             break;
         case 'ArrowRight':
-            if (snake.vx < 0) break;
+            if (lastDirection.x < 0) break;
 
-            snake.vx = CELL_SIZE;
-            snake.vy = 0;
+            direction = { x: CELL_SIZE, y: 0 };
             break;
     }
 });
