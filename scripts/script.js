@@ -45,15 +45,15 @@ function gameLoop(currentTime) {
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    drawFood();
-    drawSnake();
+    spawnFood();
+    spawnSnake();
 }
 
 // call main function
 window.requestAnimationFrame(gameLoop); 
 
 // other functions
-function drawSnake() {
+function spawnSnake() {
     snake.x += snake.vx;
     snake.y += snake.vy;
 
@@ -68,36 +68,30 @@ function drawSnake() {
     snake.body.forEach((elem, index) => {
         if (index === 0) {
             context.fillStyle = '#FAC505'; //color of head
-
-            if (checkCollision(elem, index)) gameOver = true;
         } else {
             context.fillStyle = '#B68F03'; //color of body
         }
         context.fillRect( elem.x, elem.y, CELL_SIZE, CELL_SIZE );
-
-        if (onSnake(food)) {
-            snake.maxBody++;
-            incScore();
-            food = getRandomFoodPosition();
-        }
     });
+
+    if (selfСollision()) gameOver = true;
+
+    if (onSnake(food)) {
+        snake.maxBody++;
+        incScore();
+        food = getRandomFoodPosition();
+    }
 }
 
-function onSnake(obj) {
+function onSnake(obj, { ignoreHead = false } = {}) {
     return snake.body.some((elem, index) => {
-        if (index === 0) return false;
+        if (index === 0 && ignoreHead) return false;
         return comparePositions(elem, obj);
     });
 }
 
-function checkCollision(elem, index) {
-    for (let i = index + 1; i < snake.body.length; i++) {
-        if (elem.x === snake.body[i].x && elem.y === snake.body[i].y) {
-            return true;
-        }
-    }
-
-    return false;
+function selfСollision() {
+    return onSnake(snake.body[0], { ignoreHead: true });
 }
 
 function outsideCanvas() {
@@ -114,7 +108,7 @@ function outsideCanvas() {
     }
 }
 
-function drawFood() {
+function spawnFood() {
     context.beginPath();
     context.fillStyle = '#c2003d';
     context.arc( food.x + (CELL_SIZE / 2), food.y + (CELL_SIZE / 2), FOOD_RADIUS, 0, 2 * Math.PI );
