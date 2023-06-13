@@ -1,15 +1,15 @@
 import { comparePositions } from "./supportFunctions.js";
 
 export default class Snake {
-    constructor(canvas, config) {
-        this.canvas = canvas;
-        this.config = config;
+    constructor(_canvas, _config) {
+        this.canvas = _canvas;
+        this.config = _config;
 
         this.x = this.canvas.elem.width / 2;
         this.y = this.canvas.elem.width / 2;
         
         this.body = [];
-        this.maxBody = 3;
+        this.maxBodyLength = 3;
 
         this.lastDirection = { x: this.config.CELL_SIZE, y: 0 };
         this.direction = { x: this.config.CELL_SIZE, y: 0 };
@@ -23,11 +23,11 @@ export default class Snake {
         this.x += this.direction.x;
         this.y += this.direction.y;
     
-        this.outsideCanvas();
+        this.ifOutsideCanvas();
     
         this.body.unshift({ x: this.x, y: this.y });
     
-        if (this.body.length > this.maxBody) {
+        if (this.body.length > this.maxBodyLength) {
             this.body.pop();
         }
     }
@@ -54,7 +54,7 @@ export default class Snake {
         return this.onSnake(this.body[0], { ignoreHead: true });
     }
 
-    outsideCanvas() {
+    ifOutsideCanvas() {
         if (this.x < 0) {
             this.x = this.canvas.elem.width - this.config.CELL_SIZE;
         } else if (this.x >= this.canvas.elem.width) {
@@ -66,6 +66,11 @@ export default class Snake {
         } else if (this.y >= this.canvas.elem.height) {
             this.y = 0;
         }
+
+        // // make walls impenetrable
+        // return this.x < 0
+        //     || this.x >= this.canvas.elem.width
+        //     || this.y < 0 || this.y >= this.canvas.elem.height;
     }
 
     addKeyboardListener() {
