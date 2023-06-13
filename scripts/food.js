@@ -1,11 +1,9 @@
-import Config from "./config.js";
 import { getRandomNum } from "./supportFunctions.js";
 
-
 export default class Food {
-    constructor(canvas, config, snake) {
-        this.canvas = canvas;
-        this.config = config;
+    constructor(_canvas, _config, snake) {
+        this.canvas = _canvas;
+        this.config = _config;
 
         this.position = this.getRandomFoodPosition(snake);
     }
@@ -20,7 +18,7 @@ export default class Food {
     
     draw(context) {
         context.beginPath();
-        context.fillStyle = '#c2003d';
+        context.fillStyle = '#C2003D';
         context.arc( this.position.x + (this.config.CELL_SIZE / 2), this.position.y + (this.config.CELL_SIZE / 2), this.config.FOOD_RADIUS, 0, 2 * Math.PI );
         context.fill();
     }

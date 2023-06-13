@@ -1,15 +1,13 @@
-import Config from "./config.js";
-
 export default class Loop {
-    constructor (_update, _draw, _checkDeath) {
+    constructor (_update, _draw, _checkDeath, _config) {
         this.update = _update;
         this.draw = _draw;
         this.checkDeath = _checkDeath;
 
+        this.config = _config;
+
         this.deltaTime = 0;
         this.lastRenderTime = 0;
-
-        this.config = new Config;
 
         this.animate = this.animate.bind(this);
         this.animate();
@@ -28,7 +26,7 @@ export default class Loop {
 
         this.deltaTime = currentTime - this.lastRenderTime;
 
-        if (this.deltaTime / 1000 < 1 / this.config.SNAKE_SPEED) return;
+        if ( (this.deltaTime / 1000) < (1 / this.config.SNAKE_SPEED) ) return;
         
         this.update();
         this.draw();

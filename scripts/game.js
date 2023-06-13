@@ -13,19 +13,19 @@ class Game {
         this.snake = new Snake(this.canvas, this.config);
         this.food = new Food(this.canvas, this.config, this.snake);
 
-        new Loop(this.update.bind(this), this.draw.bind(this), this.checkDeath.bind(this));
+        new Loop(this.update.bind(this), this.draw.bind(this), this.checkDeath.bind(this), this.config);
     }
 
     update() {
-        this.snake.update();
         this.food.update(this.score, this.snake);
+        this.snake.update();
     }
 
     draw() {
         this.canvas.context.clearRect( 0, 0, this.canvas.elem.width, this.canvas.elem.height );
 
-        this.snake.draw(this.canvas.context);
         this.food.draw(this.canvas.context);
+        this.snake.draw(this.canvas.context);
     }
 
     checkDeath() {
