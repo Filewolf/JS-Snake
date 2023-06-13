@@ -10,7 +10,7 @@ export default class Food {
 
     update(score, snake) {
         if (snake.onSnake(this.position)) {
-            snake.maxBody++;
+            snake.maxBodyLength++;
             this.position = this.getRandomFoodPosition(snake);
             score.increment();
         }
