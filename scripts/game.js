@@ -33,4 +33,4 @@ class Game {
     }
 }
 
-new Game(document.querySelector('.game__wrapper'));
+window.onload = () => new Game(document.querySelector('.game__wrapper'));
