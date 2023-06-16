@@ -5,6 +5,7 @@ Just a very simple game based on JavaScript.
 * made with `canvas`
 * using *modules*
 * without any frameworks
+* snake can go through walls
 * yellow snake on dark bg :)
 
 The goal is to practice creating games in pure JS and also to show my current language skills. 
