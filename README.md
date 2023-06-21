@@ -13,7 +13,7 @@ The goal is to practice creating games in pure JS and also to show my current la
 ## How to play
 ```
 npm install
-npx http-server
+http-server
 ```
 
 ## So how does it look?
